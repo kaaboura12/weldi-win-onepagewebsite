@@ -1213,9 +1213,10 @@ body::before {
 /* Wave animations removed - using custom icon images */
 
 /* ═══════════════════════════════════════════════════════════════
-   RESPONSIVE DESIGN
+   RESPONSIVE DESIGN — MOBILE FIRST
    ═══════════════════════════════════════════════════════════════ */
 
+/* Tablet Styles (1024px and below) */
 @media (max-width: 1024px) {
   .hero-content {
     grid-template-columns: 1fr;
@@ -1245,23 +1246,39 @@ body::before {
   
   .capability-visual {
     width: 100%;
-    height: 160px;
+    height: 180px;
   }
 }
 
+/* Mobile Styles (768px and below) */
 @media (max-width: 768px) {
+  /* Optimize spacing for mobile */
   :root {
     --space-6: 2rem;
     --space-8: 3rem;
     --space-12: 4rem;
     --space-16: 5rem;
-    --space-24: 6rem;
+    --space-20: 6rem;
+    --space-24: 7rem;
   }
   
+  /* Navigation - Mobile Optimized */
   .top-nav {
-    padding: var(--space-2);
+    position: relative;
+    top: 0;
+    padding: var(--space-2) var(--space-3);
+    margin: var(--space-2) var(--space-3) 0;
     flex-wrap: wrap;
     gap: var(--space-2);
+  }
+  
+  .brand {
+    font-size: var(--text-sm);
+  }
+  
+  .logo-mark {
+    width: 28px;
+    height: 28px;
   }
   
   .nav-links {
@@ -1269,59 +1286,343 @@ body::before {
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
+    gap: var(--space-1);
   }
   
+  .nav-links a {
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-xs);
+  }
+  
+  .ghost-btn {
+    padding: var(--space-2);
+    font-size: var(--text-xs);
+  }
+  
+  /* Hero - Mobile Optimized */
   .hero {
     min-height: auto;
-    margin: var(--space-8) auto;
+    margin: var(--space-6) auto;
+    padding: 0 var(--space-4);
+  }
+  
+  .hero::before {
+    inset: -5%;
+  }
+  
+  .hero-ambient {
+    inset: -10%;
   }
   
   .hero-abstract-img {
-    width: 80%;
-    right: -20%;
-    opacity: 0.2;
+    width: 100%;
+    right: -30%;
+    top: 20%;
+    opacity: 0.15;
+    filter: blur(2px);
+  }
+  
+  .hero-text {
+    text-align: center;
+  }
+  
+  .hero-title {
+    font-size: clamp(var(--text-4xl), 10vw, var(--text-5xl));
+    margin-bottom: var(--space-4);
+  }
+  
+  .hero-lead {
+    font-size: var(--text-base);
+    margin-bottom: var(--space-6);
   }
   
   .hero-actions {
     flex-direction: column;
     width: 100%;
+    gap: var(--space-2);
   }
   
   .btn-primary,
   .btn-ghost {
     width: 100%;
     justify-content: center;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
+    /* Minimum touch target size */
+    min-height: 48px;
+  }
+  
+  /* Hero Visual - Mobile */
+  .hero-visual {
+    height: 320px;
+    margin-top: var(--space-6);
+  }
+  
+  .shield-canvas {
+    width: 220px;
+    height: 280px;
+  }
+  
+  .shield-shape {
+    inset: 30px;
   }
   
   .status-pill {
     position: static;
     margin-top: var(--space-4);
+    width: 100%;
+    justify-content: center;
+    font-size: var(--text-xs);
+    padding: var(--space-2) var(--space-3);
+  }
+  
+  /* Story Section - Mobile */
+  .story {
+    padding: 0 var(--space-4);
+    margin: var(--space-16) auto;
+  }
+  
+  .story-content {
+    gap: var(--space-6);
+  }
+  
+  .story-heading {
+    font-size: clamp(var(--text-2xl), 8vw, var(--text-4xl));
+    text-align: center;
+  }
+  
+  .story-left {
+    text-align: center;
   }
   
   .story-visual-wrapper {
-    margin-top: var(--space-6);
+    margin-top: var(--space-4);
+  }
+  
+  .story-block {
+    padding: var(--space-5);
+  }
+  
+  .story-body {
+    font-size: var(--text-base);
+  }
+  
+  /* Product Section - Mobile */
+  .product {
+    padding: var(--space-8) var(--space-4);
+    margin: var(--space-16) auto;
+  }
+  
+  .product-intro {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+  
+  .section-title {
+    font-size: clamp(var(--text-2xl), 8vw, var(--text-4xl));
+  }
+  
+  /* Capability Cards - Mobile Optimized */
+  .capabilities {
+    gap: var(--space-6);
+  }
+  
+  .capability {
+    grid-template-columns: 1fr;
+    padding: var(--space-5);
+    gap: var(--space-4);
+    text-align: center;
+  }
+  
+  .capability:hover {
+    transform: translateX(0) translateY(-4px);
   }
   
   .capability-visual {
     width: 100%;
-    height: 160px;
+    height: 140px;
+    margin: 0 auto;
+    max-width: 200px;
   }
   
   .capability-icon {
-    width: 60%;
-    height: 60%;
+    width: 70%;
+    height: 70%;
+  }
+  
+  .capability-text h3 {
+    font-size: var(--text-xl);
+  }
+  
+  .capability-text p {
+    font-size: var(--text-base);
+  }
+  
+  /* Trust Section - Mobile */
+  .trust {
+    padding: var(--space-8) var(--space-4);
+    margin: var(--space-16) auto;
+  }
+  
+  .trust-layout {
+    gap: var(--space-8);
+  }
+  
+  .trust-statement {
+    text-align: center;
+  }
+  
+  .trust-heading {
+    font-size: clamp(var(--text-2xl), 8vw, var(--text-3xl));
+  }
+  
+  .trust-body {
+    font-size: var(--text-base);
+  }
+  
+  .trust-badges-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  
+  .trust-badge {
+    padding: var(--space-4);
+    text-align: center;
+    /* Minimum touch target */
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   
   .badge-icon-img {
     width: 48px;
     height: 48px;
+    margin-bottom: var(--space-2);
   }
   
-  .trust-badges-grid {
-    grid-template-columns: 1fr;
+  .trust-badge span {
+    font-size: var(--text-sm);
+  }
+  
+  /* CTA Section - Mobile */
+  .cta-final {
+    padding: 0 var(--space-4);
+    margin: var(--space-16) auto var(--space-12);
+  }
+  
+  .cta-content {
+    padding: var(--space-12) var(--space-5);
+  }
+  
+  .cta-heading {
+    font-size: clamp(var(--text-2xl), 8vw, var(--text-4xl));
+  }
+  
+  .cta-subtext {
+    font-size: var(--text-base);
+  }
+  
+  .btn-large {
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--text-base);
+    min-height: 52px;
+  }
+  
+  .cta-footnote {
+    font-size: var(--text-xs);
   }
 }
 
+/* Small Mobile Styles (480px and below) */
+@media (max-width: 480px) {
+  /* Further optimize for very small screens */
+  :root {
+    --space-4: 1.25rem;
+    --space-5: 1.75rem;
+    --space-6: 2rem;
+    --space-8: 2.5rem;
+    --space-12: 3.5rem;
+    --space-16: 4.5rem;
+    --space-24: 6rem;
+  }
+  
+  .top-nav {
+    margin: var(--space-2) var(--space-2) 0;
+    padding: var(--space-2);
+  }
+  
+  .hero,
+  .story,
+  .product,
+  .trust,
+  .cta-final {
+    padding-left: var(--space-3);
+    padding-right: var(--space-3);
+  }
+  
+  .hero-title {
+    font-size: var(--text-3xl);
+    line-height: 1.1;
+  }
+  
+  .hero-lead {
+    font-size: var(--text-sm);
+  }
+  
+  .shield-canvas {
+    width: 180px;
+    height: 230px;
+  }
+  
+  .story-heading,
+  .section-title,
+  .trust-heading,
+  .cta-heading {
+    font-size: var(--text-2xl);
+  }
+  
+  .story-block {
+    padding: var(--space-4);
+  }
+  
+  .capability {
+    padding: var(--space-4);
+  }
+  
+  .capability-visual {
+    height: 120px;
+  }
+  
+  .btn-primary,
+  .btn-ghost,
+  .btn-large {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Landscape Mobile Orientation */
+@media (max-width: 768px) and (orientation: landscape) {
+  .hero {
+    min-height: auto;
+  }
+  
+  .hero-visual {
+    height: 280px;
+  }
+  
+  .shield-canvas {
+    width: 200px;
+    height: 250px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACCESSIBILITY & PERFORMANCE
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1331,3 +1632,60 @@ body::before {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  .btn-primary,
+  .btn-ghost,
+  .ghost-btn {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  /* Remove hover effects on touch devices */
+  .capability:hover {
+    transform: none;
+  }
+  
+  .capability:active {
+    transform: scale(0.98);
+  }
+  
+  .trust-badge:hover {
+    transform: none;
+  }
+  
+  .trust-badge:active {
+    transform: scale(0.98);
+  }
+  
+  /* Optimize scroll performance */
+  .hero-ambient,
+  .hero-abstract-img,
+  .shield-bloom {
+    will-change: auto;
+    animation: none;
+  }
+  
+  /* Remove parallax on touch devices */
+  .shield-canvas {
+    transform: none !important;
+  }
+}
+
+/* High Resolution Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Ensure crisp rendering on retina displays */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Dark Mode Support (prepared for future) */
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    Add dark mode variables here when needed
+  }
+} */

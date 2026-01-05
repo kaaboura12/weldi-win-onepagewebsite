@@ -7,6 +7,8 @@
   
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  const isMobile = window.innerWidth <= 768;
+  const isSmallMobile = window.innerWidth <= 480;
   
   /* ═══════════════════════════════════════════════════════════════
      SMOOTH SCROLL REVEALS
@@ -138,17 +140,23 @@
      ═══════════════════════════════════════════════════════════════ */
   
   function initNoiseCanvas() {
+    // Skip on very small mobile devices for performance
+    if (isSmallMobile) return;
+    
     const canvas = document.getElementById('noiseCanvas');
     if (!canvas) return;
     
     const ctx = canvas.getContext('2d');
     const dpr = window.devicePixelRatio || 1;
     
+    // Use lower DPR on mobile for better performance
+    const effectiveDpr = isMobile ? Math.min(dpr, 1.5) : dpr;
+    
     function resize() {
       const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      ctx.scale(dpr, dpr);
+      canvas.width = rect.width * effectiveDpr;
+      canvas.height = rect.height * effectiveDpr;
+      ctx.scale(effectiveDpr, effectiveDpr);
       drawNoise();
     }
     
@@ -158,8 +166,11 @@
       const imageData = ctx.createImageData(w, h);
       const buffer = new Uint32Array(imageData.data.buffer);
       
+      // Reduce noise density on mobile
+      const threshold = isMobile ? 0.6 : 0.5;
+      
       for (let i = 0; i < buffer.length; i++) {
-        if (Math.random() > 0.5) {
+        if (Math.random() > threshold) {
           buffer[i] = 0xff000000; // Black pixel
         }
       }
@@ -168,7 +179,17 @@
     }
     
     resize();
-    window.addEventListener('resize', resize);
+    
+    // Debounce resize on mobile for better performance
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      if (isMobile) {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(resize, 200);
+      } else {
+        resize();
+      }
+    });
   }
   
   /* ═══════════════════════════════════════════════════════════════
@@ -312,6 +333,69 @@
   }
   
   /* ═══════════════════════════════════════════════════════════════
+     MOBILE-SPECIFIC OPTIMIZATIONS
+     ═══════════════════════════════════════════════════════════════ */
+  
+  function initMobileOptimizations() {
+    if (!isMobile) return;
+    
+    // Optimize scroll performance on mobile
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          // Scroll-based optimizations here if needed
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+    
+    // Add touch feedback to interactive elements
+    const interactiveElements = document.querySelectorAll('.capability, .trust-badge, button, a');
+    interactiveElements.forEach(el => {
+      el.addEventListener('touchstart', function() {
+        this.style.opacity = '0.8';
+      }, { passive: true });
+      
+      el.addEventListener('touchend', function() {
+        this.style.opacity = '';
+      }, { passive: true });
+    });
+    
+    // Optimize images for mobile
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+      img.loading = 'lazy';
+    });
+    
+    // Prevent zoom on double tap for buttons
+    const buttons = document.querySelectorAll('button, .btn-primary, .btn-ghost');
+    buttons.forEach(btn => {
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        btn.click();
+      });
+    });
+  }
+  
+  /* ═══════════════════════════════════════════════════════════════
+     VIEWPORT HEIGHT FIX (Mobile Safari)
+     ═══════════════════════════════════════════════════════════════ */
+  
+  function initViewportFix() {
+    // Fix for mobile viewport height (especially iOS Safari)
+    function setViewportHeight() {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    
+    setViewportHeight();
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', setViewportHeight);
+  }
+  
+  /* ═══════════════════════════════════════════════════════════════
      INITIALIZATION
      ═══════════════════════════════════════════════════════════════ */
   
@@ -320,6 +404,12 @@
     initScrollReveals();
     initSmoothScroll();
     initButtonEffects();
+    initViewportFix();
+    
+    // Mobile-specific
+    if (isMobile || isTouchDevice) {
+      initMobileOptimizations();
+    }
     
     // Progressive enhancement
     if (!prefersReducedMotion) {
@@ -330,7 +420,7 @@
     }
     
     // Log for debugging (remove in production)
-    console.log('🛡️ Weldi Win initialized');
+    console.log(`🛡️ Weldi Win initialized | Mobile: ${isMobile} | Touch: ${isTouchDevice}`);
   }
   
   // Run when DOM is ready
